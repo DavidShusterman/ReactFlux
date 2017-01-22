@@ -2,12 +2,17 @@
 var gulp = require("gulp");
 var connect = require("gulp-connect"); // Runs a local dev server
 var open = require("gulp-open"); // Open a URL in a web browser
+var browserify = require('browserify'); // Bundles JS
+var reactify = require('reactify'); // Transforms React JSX to JS
+var source = require('vinyl-source-stream'); // User conventional text streams with Gulp
+
 
 var config = {
     port: 1337,
     devBaseUrl: 'http://localhost',
     paths: {
         html: './src/*.html',
+        js: './src/**/*.js',
         dist: './dist'
     }
 }
@@ -35,4 +40,8 @@ gulp.task('html', function () {
         .pipe(connect.reload());
 });
 
-gulp.task('default',['html','open']);
+gulp.task('watch', function () {
+    gulp.watch(config.paths.html, ['html'])
+});
+
+gulp.task('default', ['html', 'open', 'watch']);
