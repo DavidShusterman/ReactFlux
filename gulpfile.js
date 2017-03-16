@@ -2,10 +2,12 @@
 var gulp = require("gulp");
 var gulp_connect = require("gulp-connect"); // Runs a local dev server
 var gulp_open = require("gulp-open"); // gulp_open a URL in a web browser
-var gulp_concat= require('gulp-concat');
+var gulp_concat = require('gulp-concat'); // Concatenates files
+var gulp_lint = require('gulp-eslint'); // Lints JS files, including JSX
 var browserify = require('browserify'); // Bundles JS
 var reactify = require('reactify'); // Transforms React JSX to JS
 var source = require('vinyl-source-stream'); // User conventional text streams with Gulp
+
 
 
 
@@ -34,6 +36,7 @@ gulp.task('gulp_connect', function () {
     });
 });
 
+//Opens the web app in the default browser and calls gulp_connect
 gulp.task('gulp_open', ['gulp_connect'], function () {
     gulp.src('dist/index.html')
         .pipe(gulp_open({
@@ -41,31 +44,45 @@ gulp.task('gulp_open', ['gulp_connect'], function () {
         }));
 });
 
+// Serves the html files from src to dist (client)
 gulp.task('html', function () {
     gulp.src(config.paths.html)
         .pipe(gulp.dest(config.paths.dist))
         .pipe(gulp_connect.reload());
 });
 
+// Serves the js files from src to dist (client) 
+// Bundle them up in bundle.js
 gulp.task('js', function () {
     browserify(config.paths.mainJs)
         .transform(reactify)
         .bundle()
-        .on('error',console.error.bind(console))
+        .on('error', console.error.bind(console))
         .pipe(source('bundle.js'))
         .pipe(gulp.dest(config.paths.dist + '/scripts'))
         .pipe(gulp_connect.reload());
 });
 
+// Serves the css files from src to dist (client)
+// Bundle them up in bundle.css
 gulp.task('css', function () {
-   gulp.src(config.paths.css) 
+    gulp.src(config.paths.css)
         .pipe(gulp_concat('bundle.css'))
-        .pipe(gulp.dest(config.paths.dist+'/css'));
+        .pipe(gulp.dest(config.paths.dist + '/css'));
 });
 
+gulp.task('lint', function () {
+    return gulp.src(config.paths.js)
+        .pipe(gulp_lint({
+            configFile : 'eslint.config.json'
+        }))
+        .pipe(gulp_lint.format());
+});
+
+//Watches for file changes
 gulp.task('watch', function () {
     gulp.watch(config.paths.html, ['html']);
-    gulp.watch(config.paths.js, ['js']);
+    gulp.watch(config.paths.js, ['js', 'lint']);
 });
 
-gulp.task('default', ['html','js','css','gulp_open', 'watch']);
+gulp.task('default', ['html', 'js', 'css', 'lint', 'gulp_open', 'watch']);
