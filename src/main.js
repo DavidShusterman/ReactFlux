@@ -1,5 +1,6 @@
 $ = jQuery = require('jquery');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Home = require('./components/homePage');
 
-React.render('<Home />' , document.getElementById('app'));
+ReactDOM.render(<Home /> , document.getElementById('app'));
