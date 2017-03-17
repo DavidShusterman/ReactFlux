@@ -30713,6 +30713,60 @@ module.exports = require('./lib/React');
 },{"./lib/React":156}],180:[function(require,module,exports){
 "use strict";
 
+var React = require('react');
+
+var About = React.createClass({displayName: "About",
+    render: function () {
+        return (
+            React.createElement("div", null, 
+                React.createElement("h1", null, "About"), 
+                React.createElement("p", null, 
+                    "This application uses the following technologies", 
+                    React.createElement("ul", null, 
+                        React.createElement("li", null, "React"), 
+                        React.createElement("li", null, "React Router"), 
+                        React.createElement("li", null, "Flux"), 
+                        React.createElement("li", null, "Node"), 
+                        React.createElement("li", null, "Gulp"), 
+                        React.createElement("li", null, "Browserify"), 
+                        React.createElement("li", null, "Bootstrap")
+                    )
+                )
+            )
+        );
+    }
+});
+
+module.exports = About;
+
+},{"react":179}],181:[function(require,module,exports){
+"use strict";
+
+var React=  require('react');
+
+var Header = React.createClass({displayName: "Header",
+    render: function () {
+        return(
+            React.createElement("nav", {className: "navbar navbar-default"}, 
+                React.createElement("div", {className: "container-fluid"}, 
+                    React.createElement("a", {href: "/", className: "navbar-brand"}, 
+                        React.createElement("img", {src: "images/pluralsight-logo.png"})
+                    ), 
+                    React.createElement("ul", {className: "nav navbar-nav"}, 
+                        React.createElement("li", null, React.createElement("a", {href: "/"}, "Home")), 
+                        React.createElement("li", null, React.createElement("a", {href: "/#about"}, "About"))
+                    )
+                )
+            )
+        );
+    }
+});
+
+module.exports = Header;
+
+},{"react":179}],182:[function(require,module,exports){
+"use strict";
+
 var React =require('react');
 
 var Home = React.createClass({displayName: "Home",
@@ -30728,12 +30782,40 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports=Home;
 
-},{"react":179}],181:[function(require,module,exports){
+},{"react":179}],183:[function(require,module,exports){
 $ = jQuery = require('jquery');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Home = require('./components/homePage');
+var About = require('./components/about/aboutPage');
+var Header = require('./components/common/header');
 
-ReactDOM.render(React.createElement(Home, null) , document.getElementById('app'));
+(function(window) {
+        var App = React.createClass({displayName: "App",
+        render: function() {
+            var Child;
 
-},{"./components/homePage":180,"jquery":24,"react":179,"react-dom":26}]},{},[181]);
+            switch(this.props.route){
+                case 'about': Child = About; break;
+                default: Child = Home;
+            }
+            return (
+                React.createElement("div", null, 
+                    React.createElement(Header, null), 
+                    React.createElement(Child, null)
+                )
+            );
+        }
+    });
+
+    function render() {
+        var route = window.location.hash.substr(1);
+        ReactDOM.render(React.createElement(App, {route: route}),document.getElementById('app'));
+    }
+
+    window.addEventListener('hashchange',render);
+    render();
+
+    ReactDOM.render(React.createElement(Home, null) , document.getElementById('app'));    
+})(window);
+},{"./components/about/aboutPage":180,"./components/common/header":181,"./components/homePage":182,"jquery":24,"react":179,"react-dom":26}]},{},[183]);

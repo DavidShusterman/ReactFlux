@@ -21,6 +21,7 @@ var config = {
             'node_modules/bootstrap/dist/css/bootstrap.min.css',
             'node_modules/bootstrap/dist/css/bootstrap-theme.min.css'
         ],
+        images: './src/images/*',
         dist: './dist',
         mainJs: './src/main.js'
     }
@@ -71,6 +72,19 @@ gulp.task('css', function () {
         .pipe(gulp.dest(config.paths.dist + '/css'));
 });
 
+// Serves the images files from src to dist (client)
+gulp.task('images', function () {
+    gulp.src(config.paths.images)
+        .pipe(gulp.dest(config.paths.dist + '/images'))
+        .pipe(gulp_connect.reload());
+    
+    gulp.src('./src/favicon.ico')
+        .pipe(gulp.dest(config.paths.dist));
+});
+
+
+// Keeps track over js convention and set of rules
+// that are set in eslint.config.json file
 gulp.task('lint', function () {
     return gulp.src(config.paths.js)
         .pipe(gulp_lint({
@@ -85,4 +99,6 @@ gulp.task('watch', function () {
     gulp.watch(config.paths.js, ['js', 'lint']);
 });
 
-gulp.task('default', ['html', 'js', 'css', 'lint', 'gulp_open', 'watch']);
+// task that is being called when 'gulp' is being called.
+//calls all other tasks by order
+gulp.task('default', ['html', 'js', 'css','images' ,'lint', 'gulp_open', 'watch']);
