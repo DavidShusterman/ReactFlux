@@ -30,6 +30,4 @@ var Header = require('./components/common/header');
 
     window.addEventListener('hashchange',render);
     render();
-
-    ReactDOM.render(<Home /> , document.getElementById('app'));    
 })(window);

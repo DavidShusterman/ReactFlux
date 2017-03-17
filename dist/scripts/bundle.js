@@ -30748,9 +30748,9 @@ var Header = React.createClass({displayName: "Header",
     render: function () {
         return(
             React.createElement("nav", {className: "navbar navbar-default"}, 
-                React.createElement("div", {className: "container-fluid"}, 
-                    React.createElement("a", {href: "/", className: "navbar-brand"}, 
-                        React.createElement("img", {src: "images/pluralsight-logo.png"})
+                React.createElement("div", {className: "navbar-fluid"}, 
+                    React.createElement("a", {href: "/"}, 
+                        React.createElement("img", {className: "navbar-brand", src: "images/pluralsight-logo.png"})
                     ), 
                     React.createElement("ul", {className: "nav navbar-nav"}, 
                         React.createElement("li", null, React.createElement("a", {href: "/"}, "Home")), 
@@ -30815,7 +30815,5 @@ var Header = require('./components/common/header');
 
     window.addEventListener('hashchange',render);
     render();
-
-    ReactDOM.render(React.createElement(Home, null) , document.getElementById('app'));    
 })(window);
 },{"./components/about/aboutPage":180,"./components/common/header":181,"./components/homePage":182,"jquery":24,"react":179,"react-dom":26}]},{},[183]);
